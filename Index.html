@@ -1,0 +1,78 @@
+data:text/html,
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Game Hub</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f0f0f0;color:#333;}
+header{background:#333;color:#fff;padding:1rem;text-align:center;position:sticky;top:0;z-index:100;}
+nav{display:flex;flex-wrap:wrap;justify-content:center;background:#444;}
+nav button{color:#fff;background:none;border:none;padding:0.8rem 1.2rem;cursor:pointer;font-size:1rem;}
+nav button:hover{background:#555;}
+main{padding:1rem;}
+.game-tab{display:none;}
+.game-tab.active{display:block;}
+.game-card{background:#fff;padding:1rem;border-radius:10px;margin-bottom:1.5rem;box-shadow:0 0 5px rgba(0,0,0,0.1);}
+iframe{width:100%;height:250px;border:none;border-radius:10px;}
+.feedback-popup{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;}
+.feedback-popup.active{display:flex;}
+.feedback-content{background:#fff;padding:1.5rem;border-radius:10px;width:90%;max-width:500px;position:relative;}
+.close-btn{position:absolute;top:10px;right:10px;background:red;color:white;border:none;border-radius:50%;width:30px;height:30px;font-weight:bold;cursor:pointer;}
+.theme-toggle{position:absolute;right:1rem;top:1rem;background:none;color:#fff;border:2px solid #fff;padding:0.3rem 0.6rem;border-radius:5px;cursor:pointer;}
+@media(max-width:480px){iframe{height:200px;}nav button{width:100%;}}
+</style>
+</head>
+<body data-theme="light">
+
+<header>
+<h1>Mobile Game Hub</h1>
+<button class="theme-toggle">Dark Mode</button>
+</header>
+
+<nav id="gameNav"></nav>
+
+<main id="gameContainer"></main>
+
+<div class="feedback-popup" id="feedbackPopup">
+<div class="feedback-content">
+<button class="close-btn" id="closeFeedback">&times;</button>
+<h2>Feedback</h2>
+<iframe src="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true" width="100%" height="500"></iframe>
+</div>
+</div>
+
+<script>
+const games=[
+{name:"Bubble Shooter",url:"https://www.htmlgames.com/bubble-shooter/"},
+{name:"Moto X3M Pool Party",url:"https://www.htmlgames.com/moto-x3m-pool-party/"},
+{name:"TNT Bomb",url:"https://www.htmlgames.com/tnt-bomb/"},
+{name:"Bubble Woods",url:"https://www.htmlgames.com/bubble-woods/"},
+{name:"Om Nom Run",url:"https://www.htmlgames.com/om-nom-run/"}
+];
+
+const nav=document.getElementById("gameNav");
+const container=document.getElementById("gameContainer");
+
+games.forEach((game,index)=>{
+const btn=document.createElement("button"); btn.textContent=game.name; btn.dataset.target=`game${index}`; nav.appendChild(btn);
+const tab=document.createElement("div"); tab.classList.add("game-tab"); if(index===0)tab.classList.add("active"); tab.id=`game${index}`;
+const card=document.createElement("div"); card.classList.add("game-card");
+const title=document.createElement("h2"); title.textContent=game.name;
+const iframe=document.createElement("iframe"); iframe.src=game.url; iframe.title=game.name;
+card.appendChild(title); card.appendChild(iframe); tab.appendChild(card); container.appendChild(tab);
+btn.addEventListener("click",()=>{document.querySelectorAll(".game-tab").forEach(t=>t.classList.remove("active"));tab.classList.add("active");});
+});
+
+const openBtn=document.createElement("button"); openBtn.textContent="Feedback"; nav.appendChild(openBtn);
+const popup=document.getElementById("feedbackPopup"); const closeBtn=document.getElementById("closeFeedback");
+openBtn.addEventListener("click",()=>popup.classList.add("active")); closeBtn.addEventListener("click",()=>popup.classList.remove("active"));
+popup.addEventListener("click",(e)=>{if(e.target===popup)popup.classList.remove("active");});
+document.querySelector(".theme-toggle").addEventListener("click",()=>{
+document.body.dataset.theme=document.body.dataset.theme==="light"?"dark":"light";
+});
+</script>
+
+</body>
+</html>
